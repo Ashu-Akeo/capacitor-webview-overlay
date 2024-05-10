@@ -1,7 +1,10 @@
-import { PluginListenerHandle, registerPlugin } from '@capacitor/core';
-import { IWebviewOverlayPlugin, ScriptInjectionTime } from './definitions';
+import type { PluginListenerHandle} from '@capacitor/core';
+import { registerPlugin } from '@capacitor/core';
+import { ResizeObserver } from '@juggle/resize-observer';
 
-import ResizeObserver from 'resize-observer-polyfill';
+import type { IWebviewOverlayPlugin} from './definitions';
+import { ScriptInjectionTime } from './definitions';
+
 
 const WebviewOverlayPlugin = registerPlugin<IWebviewOverlayPlugin>('WebviewOverlayPlugin');
 
@@ -98,13 +101,23 @@ class WebviewOverlayClass {
 
     async toggleSnapshot(snapshotVisible: boolean): Promise<void> {
         return new Promise<void>(async (resolve) => {
-            const snapshot = (await WebviewOverlayPlugin.getSnapshot()).src;
             if (snapshotVisible) {
+                const snapshot = (await WebviewOverlayPlugin.getSnapshot()).src;
                 if (snapshot) {
-                    const buffer = await (await fetch('data:image/jpeg;base64,' + snapshot)).arrayBuffer();
-                    const blob = new Blob([buffer], { type: 'image/jpeg' });
+                    // const buffer = await (await fetch('data:image/jpeg;base64,' + snapshot)).arrayBuffer();
+                    // reference: https://stackoverflow.com/a/16245768
+                    /* const byteCharacters = atob(snapshot);
+                    const byteNumbers = new Array(byteCharacters.length);
+                    for (let i = 0; i < byteCharacters.length; i++) {
+                        byteNumbers[i] = byteCharacters.charCodeAt(i);
+                    }
+                    const buffer = new Uint8Array(byteNumbers); */
+                    const buffer = this.b64toByteArr(snapshot);
+                    // const blob = new Blob([buffer], { type: 'image/jpeg' });
+                    const blob = new Blob(buffer, { type: 'image/jpeg' });
                     const blobUrl = URL.createObjectURL(blob);
                     const img = new Image();
+                    console.warn('img.onload', blobUrl);
                     img.onload = async () => {
                         if (this.element && this.element.style) {
                             this.element.style.backgroundImage = `url(${blobUrl})`;
@@ -133,6 +146,26 @@ class WebviewOverlayClass {
             }
         });
     }
+
+    b64toByteArr = (b64Data, sliceSize = 512) => {
+        const byteCharacters = atob(b64Data);
+        const byteArrays = [];
+      
+        for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+          const slice = byteCharacters.slice(offset, offset + sliceSize);
+      
+          const byteNumbers = new Array(slice.length);
+          for (let i = 0; i < slice.length; i++) {
+            byteNumbers[i] = slice.charCodeAt(i);
+          }
+      
+          const byteArray = new Uint8Array(byteNumbers);
+          byteArrays.push(byteArray);
+        }
+          
+        // const blob = new Blob(byteArrays, {type: contentType});
+        return byteArrays;
+      }
 
     async evaluateJavaScript(javascript: string): Promise<string> {
         return (await WebviewOverlayPlugin.evaluateJavaScript({
