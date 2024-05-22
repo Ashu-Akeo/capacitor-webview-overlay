@@ -206,6 +206,9 @@ public class WebviewOverlayPlugin: CAPPlugin {
             if (userAgent != nil) {
                 webConfiguration.applicationNameForUserAgent = "\(webConfiguration.applicationNameForUserAgent), \(userAgent)";
             }
+            if (self.bridge?.webView?.configuration.processPool != nil) {
+                webConfiguration.processPool = (self.bridge?.webView?.configuration.processPool)!;
+            }
 
             // Content controller
             let javascript = call.getString("javascript") ?? ""
