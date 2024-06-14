@@ -38,6 +38,7 @@ class WebviewOverlayClass {
     pageLoadedEvent: PluginListenerHandle;
     progressEvent: PluginListenerHandle;
     navigationHandlerEvent: PluginListenerHandle;
+    miniAppCallbackEvent: PluginListenerHandle;
     resizeObserver: ResizeObserver;
 
     open(options: WebviewOverlayOpenOptions): Promise<void> {
@@ -95,6 +96,9 @@ class WebviewOverlayClass {
         }
         if (this.navigationHandlerEvent) {
             this.navigationHandlerEvent.remove();
+        }
+        if (this.miniAppCallbackEvent) {
+            this.miniAppCallbackEvent.remove();
         }
         return WebviewOverlayPlugin.close();
     }
@@ -195,16 +199,20 @@ class WebviewOverlayClass {
         });
     }
 
+    miniAppEvent(listenerFunc: (event: any) => void) {
+        this.miniAppCallbackEvent = WebviewOverlayPlugin.addListener('miniAppCallback', listenerFunc);
+    }
+
     toggleFullscreen() {
         WebviewOverlayPlugin.toggleFullscreen();
     }
 
     goBack() {
-        WebviewOverlayPlugin.goBack();
+        return WebviewOverlayPlugin.goBack();
     }
 
     goForward() {
-        WebviewOverlayPlugin.goForward();
+        return WebviewOverlayPlugin.goForward();
     }
 
     reload() {

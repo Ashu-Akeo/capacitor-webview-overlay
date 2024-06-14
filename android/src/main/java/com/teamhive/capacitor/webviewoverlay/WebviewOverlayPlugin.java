@@ -5,10 +5,13 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Message;
+
+import com.getcapacitor.Logger;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 //import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.JavascriptInterface;
 import android.webkit.MimeTypeMap;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
@@ -30,6 +33,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import android.util.Base64;
+
+import org.json.JSONException;
 
 import fi.iki.elonen.NanoHTTPD;
 
@@ -233,6 +238,7 @@ public class WebviewOverlayPlugin extends Plugin {
                 webView.setX(x);
                 webView.setY(y);
                 webView.requestLayout();
+                webView.addJavascriptInterface(WebviewOverlayPlugin.this, "Wakandi");
 
                 ((ViewGroup) getBridge().getWebView().getParent()).addView(webView);
 
@@ -451,10 +457,14 @@ public class WebviewOverlayPlugin extends Plugin {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                JSObject object = new JSObject();
                 if (webView != null) {
-                    webView.goBack();
+                    if (webView.canGoBack()) {
+                        webView.goBack();
+                    }
+                    object.put("canGoBack", webView.canGoBack());
                 }
-                call.success();
+                call.resolve(object);
             }
         });
     }
@@ -464,10 +474,14 @@ public class WebviewOverlayPlugin extends Plugin {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                JSObject object = new JSObject();
                 if (webView != null) {
-                    webView.goForward();
+                    if (webView.canGoForward()) {
+                        webView.goForward();
+                    }
+                    object.put("canGoForward", webView.canGoForward());
                 }
-                call.success();
+                call.resolve(object);
             }
         });
     }
@@ -515,5 +529,15 @@ public class WebviewOverlayPlugin extends Plugin {
                 call.success();
             }
         });
+    }
+
+    @JavascriptInterface
+    public void postMessage(String message) {
+        try {
+            JSObject postData = new JSObject(message);
+            notifyListeners("miniAppCallback", postData);
+        } catch (JSONException e) {
+            Logger.error("Post message error:", e);
+        }
     }
 }

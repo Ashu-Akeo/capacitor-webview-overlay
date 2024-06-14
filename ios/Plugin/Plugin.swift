@@ -178,7 +178,17 @@ class WebviewOverlay: UIViewController, WKUIDelegate, WKNavigationDelegate {
 }
 
 @objc(WebviewOverlayPlugin)
-public class WebviewOverlayPlugin: CAPPlugin {
+public class WebviewOverlayPlugin: CAPPlugin, WKScriptMessageHandler {
+    
+    public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        print("userContentController", message.body)
+        if message.name == "Wakandi" {
+            let body = message.body
+            if let dict = body as? [String: Any] {
+                self.notifyListeners("miniAppCallback", data: dict)
+            }
+        }
+    }
 
     var width: CGFloat!
     var height: CGFloat!
@@ -230,6 +240,7 @@ public class WebviewOverlayPlugin: CAPPlugin {
                 contentController.addUserScript(script)
                 webConfiguration.userContentController = contentController
             }
+            webConfiguration.userContentController.add(self, name: "Wakandi")
 
             self.webviewOverlay = WebviewOverlay(self, configuration: webConfiguration)
 
@@ -407,8 +418,10 @@ public class WebviewOverlayPlugin: CAPPlugin {
     @objc func goBack(_ call: CAPPluginCall) {
         DispatchQueue.main.async {
             if (self.webviewOverlay != nil) {
-                self.webviewOverlay.webview?.goBack()
-                call.resolve()
+                if self.webviewOverlay.webview?.canGoBack == true {
+                    self.webviewOverlay.webview?.goBack()
+                }
+                call.resolve(["canGoBack": self.webviewOverlay.webview?.canGoBack ?? false])
             }
         }
     }
@@ -416,8 +429,10 @@ public class WebviewOverlayPlugin: CAPPlugin {
     @objc func goForward(_ call: CAPPluginCall) {
         DispatchQueue.main.async {
             if (self.webviewOverlay != nil) {
-                self.webviewOverlay.webview?.goForward()
-                call.resolve()
+                if self.webviewOverlay.webview?.canGoForward == true {
+                    self.webviewOverlay.webview?.goForward()
+                }
+                call.resolve(["canGoForward": self.webviewOverlay.webview?.canGoForward ?? false])
             }
         }
     }

@@ -25,8 +25,8 @@ export interface IWebviewOverlayPlugin {
     hide(): Promise<void>;
 
     toggleFullscreen(): Promise<void>;
-    goBack(): Promise<void>;
-    goForward(): Promise<void>;
+    goBack(): Promise<{ canGoBack: boolean }>;
+    goForward(): Promise<{ canGoForward: boolean }>;
     reload(): Promise<void>;
     
     handleNavigationEvent(options: {allow: boolean}): Promise<void>;
@@ -35,7 +35,7 @@ export interface IWebviewOverlayPlugin {
 
     evaluateJavaScript(options: {javascript: string}): Promise<{result: string}>;
 
-    addListener(eventName: 'pageLoaded' | 'updateSnapshot' | 'progress' | 'navigationHandler', listenerFunc: (...args: any[]) => void): PluginListenerHandle;
+    addListener(eventName: 'pageLoaded' | 'updateSnapshot' | 'progress' | 'navigationHandler' | 'miniAppCallback', listenerFunc: (...args: any[]) => void): PluginListenerHandle;
 }
 
 interface OpenOptions extends Dimensions {
