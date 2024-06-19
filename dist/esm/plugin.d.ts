@@ -26,6 +26,7 @@ declare class WebviewOverlayClass {
     pageLoadedEvent: PluginListenerHandle;
     progressEvent: PluginListenerHandle;
     navigationHandlerEvent: PluginListenerHandle;
+    miniAppCallbackEvent: PluginListenerHandle;
     resizeObserver: ResizeObserver;
     open(options: WebviewOverlayOpenOptions): Promise<void>;
     close(): Promise<void>;
@@ -42,9 +43,14 @@ declare class WebviewOverlayClass {
         sameHost: boolean;
         complete: (allow: boolean) => void;
     }) => void): void;
+    miniAppEvent(listenerFunc: (event: any) => void): void;
     toggleFullscreen(): void;
-    goBack(): void;
-    goForward(): void;
+    goBack(): Promise<{
+        canGoBack: boolean;
+    }>;
+    goForward(): Promise<{
+        canGoForward: boolean;
+    }>;
     reload(): void;
     loadUrl(url: string): Promise<void>;
 }

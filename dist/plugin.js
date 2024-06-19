@@ -77,6 +77,9 @@ var capacitorWebviewOverlay = (function (exports, core, resizeObserver) {
             if (this.navigationHandlerEvent) {
                 this.navigationHandlerEvent.remove();
             }
+            if (this.miniAppCallbackEvent) {
+                this.miniAppCallbackEvent.remove();
+            }
             return WebviewOverlayPlugin.close();
         }
         async toggleSnapshot(snapshotVisible) {
@@ -145,14 +148,17 @@ var capacitorWebviewOverlay = (function (exports, core, resizeObserver) {
                 listenerFunc(Object.assign(Object.assign({}, event), { complete }));
             });
         }
+        miniAppEvent(listenerFunc) {
+            this.miniAppCallbackEvent = WebviewOverlayPlugin.addListener('miniAppCallback', listenerFunc);
+        }
         toggleFullscreen() {
             WebviewOverlayPlugin.toggleFullscreen();
         }
         goBack() {
-            WebviewOverlayPlugin.goBack();
+            return WebviewOverlayPlugin.goBack();
         }
         goForward() {
-            WebviewOverlayPlugin.goForward();
+            return WebviewOverlayPlugin.goForward();
         }
         reload() {
             WebviewOverlayPlugin.reload();
