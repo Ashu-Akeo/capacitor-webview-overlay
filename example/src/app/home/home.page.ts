@@ -1,7 +1,9 @@
-import { Component, OnInit, ViewChild, ElementRef, OnDestroy, NgZone } from '@angular/core';
-import { Platform, MenuController } from '@ionic/angular';
-import { WebviewOverlay } from '@teamhive/capacitor-webview-overlay';
+import type { OnInit, ElementRef, OnDestroy, NgZone } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Plugins } from '@capacitor/core';
+import type { Platform, MenuController } from '@ionic/angular';
+import { WebviewOverlay } from '@teamhive/capacitor-webview-overlay';
+
 const { Browser } = Plugins;
 
 @Component({

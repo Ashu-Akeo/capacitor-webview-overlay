@@ -418,10 +418,11 @@ public class WebviewOverlayPlugin: CAPPlugin, WKScriptMessageHandler {
     @objc func goBack(_ call: CAPPluginCall) {
         DispatchQueue.main.async {
             if (self.webviewOverlay != nil) {
-                if self.webviewOverlay.webview?.canGoBack == true {
+                var canGoBack = self.webviewOverlay.webview?.canGoBack ?? false
+                if canGoBack == true {
                     self.webviewOverlay.webview?.goBack()
                 }
-                call.resolve(["canGoBack": self.webviewOverlay.webview?.canGoBack ?? false])
+                call.resolve(["canGoBack": canGoBack])
             }
         }
     }
@@ -429,10 +430,11 @@ public class WebviewOverlayPlugin: CAPPlugin, WKScriptMessageHandler {
     @objc func goForward(_ call: CAPPluginCall) {
         DispatchQueue.main.async {
             if (self.webviewOverlay != nil) {
-                if self.webviewOverlay.webview?.canGoForward == true {
+                var canGoForward = self.webviewOverlay.webview?.canGoForward ?? false
+                if canGoForward == true {
                     self.webviewOverlay.webview?.goForward()
                 }
-                call.resolve(["canGoForward": self.webviewOverlay.webview?.canGoForward ?? false])
+                call.resolve(["canGoForward": canGoForward])
             }
         }
     }

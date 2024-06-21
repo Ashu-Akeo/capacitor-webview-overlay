@@ -459,10 +459,10 @@ public class WebviewOverlayPlugin extends Plugin {
             public void run() {
                 JSObject object = new JSObject();
                 if (webView != null) {
+                    object.put("canGoBack", webView.canGoBack());
                     if (webView.canGoBack()) {
                         webView.goBack();
                     }
-                    object.put("canGoBack", webView.canGoBack());
                 }
                 call.resolve(object);
             }
@@ -476,10 +476,10 @@ public class WebviewOverlayPlugin extends Plugin {
             public void run() {
                 JSObject object = new JSObject();
                 if (webView != null) {
+                    object.put("canGoForward", webView.canGoForward());
                     if (webView.canGoForward()) {
                         webView.goForward();
                     }
-                    object.put("canGoForward", webView.canGoForward());
                 }
                 call.resolve(object);
             }

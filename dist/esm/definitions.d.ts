@@ -1,4 +1,4 @@
-import { PluginListenerHandle } from '@capacitor/core';
+import type { PluginListenerHandle } from '@capacitor/core';
 export interface IWebviewOverlayPlugin {
     /**
      * Open a webview with the given URL

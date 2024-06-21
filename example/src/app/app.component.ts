@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { Platform } from '@ionic/angular';
 import { Plugins } from '@capacitor/core';
+import type { Platform } from '@ionic/angular';
+
 const { SplashScreen } = Plugins;
 
 @Component({
