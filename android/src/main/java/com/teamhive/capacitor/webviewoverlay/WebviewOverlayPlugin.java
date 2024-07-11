@@ -9,6 +9,7 @@ import android.os.Message;
 import com.getcapacitor.Logger;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 //import android.support.design.widget.FloatingActionButton;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
@@ -87,7 +88,11 @@ public class WebviewOverlayPlugin extends Plugin {
     }
 
     private float getPixels(int value) {
-        return value * getContext().getResources().getDisplayMetrics().density + 0.5f;
+//        return value * getContext().getResources().getDisplayMetrics().density + 0.5f;
+        return (int) TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            value,
+            getContext().getResources().getDisplayMetrics());
     }
 
     @SuppressLint("SetJavaScriptEnabled")

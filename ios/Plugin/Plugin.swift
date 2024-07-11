@@ -277,6 +277,7 @@ public class WebviewOverlayPlugin: CAPPlugin, WKScriptMessageHandler {
                 self.webviewOverlay = nil
                 self.hidden = false
             }
+            call.resolve()
         }
     }
 
