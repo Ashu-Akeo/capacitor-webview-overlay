@@ -33,13 +33,13 @@ export interface WebviewOverlayOpenOptions {
 
 class WebviewOverlayClass {
 
-    element: HTMLElement;
-    updateSnapshotEvent: PluginListenerHandle;
-    pageLoadedEvent: PluginListenerHandle;
-    progressEvent: PluginListenerHandle;
-    navigationHandlerEvent: PluginListenerHandle;
-    miniAppCallbackEvent: PluginListenerHandle;
-    resizeObserver: ResizeObserver;
+    element?: HTMLElement;
+    updateSnapshotEvent!: PluginListenerHandle;
+    pageLoadedEvent!: PluginListenerHandle;
+    progressEvent!: PluginListenerHandle;
+    navigationHandlerEvent!: PluginListenerHandle;
+    miniAppCallbackEvent!: PluginListenerHandle;
+    resizeObserver!: ResizeObserver;
 
     open(options: WebviewOverlayOpenOptions): Promise<void> {
         this.element = options.element;
@@ -151,7 +151,7 @@ class WebviewOverlayClass {
         });
     }
 
-    b64toByteArr = (b64Data, sliceSize = 512) => {
+    b64toByteArr = (b64Data: string, sliceSize = 512) => {
         const byteCharacters = atob(b64Data);
         const byteArrays = [];
       
