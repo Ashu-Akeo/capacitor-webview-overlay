@@ -42,7 +42,9 @@
       "watch": "tsc --watch",
       "prepublishOnly": "npm run build"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@juggle/resize-observer": "^3.4.0"
+  },
   "devDependencies": {
       "@capacitor/android": "^7.3.0",
       "@capacitor/core": "^7.3.0",
