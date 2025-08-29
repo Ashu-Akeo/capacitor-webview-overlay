@@ -5,7 +5,6 @@ import { ResizeObserver } from '@juggle/resize-observer';
 import type { IWebviewOverlayPlugin} from './definitions';
 import { ScriptInjectionTime } from './definitions';
 
-
 const WebviewOverlayPlugin = registerPlugin<IWebviewOverlayPlugin>('WebviewOverlayPlugin');
 
 export interface WebviewOverlayOpenOptions {
